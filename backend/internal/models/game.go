@@ -10,7 +10,10 @@ type Game struct {
 	PlayerHand []Card `json:"player_hand"`
 	DealerHand []Card `json:"-"`
 
-	Deck Deck `json:"-"`
+	PlayerScore int  `json:"player_score"`
+	DealerScore int  `json:"-"`
+	
+	Deck        Deck `json:"-"`
 
-	Winner Winner `json:"winner"`
+	Winner Winner `json:"-"`
 }

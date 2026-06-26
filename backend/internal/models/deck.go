@@ -32,9 +32,6 @@ func (d *Deck) Shuffle() {
 }
 
 func (d *Deck) Draw() (Card, error) {
-	if len(d.Cards) == 0 {
-		return Card{}, errors.New("deck is empty")
-	}
 
 	card := d.Cards[0]
 	d.Cards = d.Cards[1:]

@@ -63,9 +63,30 @@ func (h *GameHandler) Action(c *fiber.Ctx) error {
 	game, err := h.service.Action(id, &req)
 
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		if err == appErr.ErrSessionNotFound {
+			return c.Status(404).JSON(fiber.Map{
+				"error": err.Error(),
+			})
+		} else {
+			return c.Status(400).JSON(fiber.Map{
+				"error": err.Error(),
+			})
+		}
+	}
+
+	if game.State == models.RoundEnd {
+
+		gameRes := &models.GameResponse{
+			GameID:            game.ID,
+			State:             string(game.State),
+			Balance:           game.Balance,
+			PlayerHand:        game.PlayerHand,
+			DealerHandVisible: game.DealerHand,
+			PlayerScore:       &game.PlayerScore,
+			DealerScore:       &game.DealerScore,
+			Winner:            (*string)(&game.Winner),
+		}
+		return c.Status(200).JSON(gameRes)
 	}
 
 	return c.Status(200).JSON(game)
